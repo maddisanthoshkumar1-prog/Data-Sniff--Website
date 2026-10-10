@@ -4,114 +4,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DataSniff</title>
-
-    <link rel="stylesheet"
-        href="{{ url_for('static', filename='style.css') }}">
+    <title>DataSniff | Log & Sensitive Data Leak Detector</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
 </head>
 
 <body>
 
 <header>
-
     <nav class="navbar">
-
-        <div class="logo">
-            DataSniff
-        </div>
+        <a href="/" class="logo-group">
+            <span class="logo-icon">🛡️</span>
+            <span class="logo-text">DataSniff</span>
+            <span class="logo-tag">Security v1.0</span>
+        </a>
 
         <ul class="menu">
-
-            <li><a href="/">Home</a></li>
-            
+            <li><a href="/" class="active">Home</a></li>
             <li><a href="/dashboard">Dashboard</a></li>
-            
             <li><a href="/scan">Scan</a></li>
-
-             <li><a href="/reports">Reports</a></li>
-
+            <li><a href="/reports">Reports</a></li>
             <li><a href="/about">About</a></li>
-
             <li><a href="/contact">Contact</a></li>
-
         </ul>
 
+        <a href="/scan" class="nav-cta">
+            <span>⚡ Start Scan</span>
+        </a>
     </nav>
-
 </header>
 
 <section class="hero">
+    <div class="hero-content">
+        <div class="hero-pill">
+            <span class="pulse-dot"></span>
+            <span>NEXT-GEN LOG & SECRET LEAK DETECTION ENGINE</span>
+        </div>
 
-    <div class="hero-text">
+        <h1>
+            Detect & Neutralize <br>
+            <span class="gradient-text">Sensitive Data Leaks</span> in Log Files
+        </h1>
 
-        <h1>DataSniff</h1>
-
-        <h2>Log and Data Leak Detector</h2>
+        <h2>Log & Data Leak Detector</h2>
 
         <p>
-
-            Detect Emails, Passwords, API Keys, Tokens and
-            other sensitive information from log files using
-            Python, Regex and Entropy Analysis.
-
+            Instantly identify Emails, Passwords, API Keys, JWT Tokens, and High-Entropy Secrets
+            from production logs using Python, Regex pattern matching, and Shannon Entropy Analysis.
         </p>
 
-        <a href="/scan">
+        <div class="hero-actions">
+            <a href="/scan" class="button">
+                ⚡ Start Scanning Logs
+            </a>
+            <a href="/dashboard" class="button secondary">
+                📊 Open Security Dashboard
+            </a>
+        </div>
 
-            <button>
-
-                Start Scanning
-
-            </button>
-
-        </a>
-
+        <!-- Interactive Telemetry Terminal Preview -->
+        <div class="hero-terminal">
+            <div class="terminal-header">
+                <div class="terminal-dots">
+                    <span class="terminal-dot dot-red"></span>
+                    <span class="terminal-dot dot-yellow"></span>
+                    <span class="terminal-dot dot-green"></span>
+                </div>
+                <span class="terminal-title">datasniff-engine --stream logs.log</span>
+            </div>
+            <div class="terminal-body">
+                <div class="terminal-line">
+                    <span class="terminal-prompt">$</span>
+                    <span>Scanning uploaded log file... [UTF-8 encoding validated]</span>
+                </div>
+                <div class="terminal-line">
+                    <span class="terminal-prompt">▸</span>
+                    <span class="terminal-danger">[CRITICAL] Detected API Key: 'sk-live-************' (Regex Match)</span>
+                </div>
+                <div class="terminal-line">
+                    <span class="terminal-prompt">▸</span>
+                    <span class="terminal-danger">[WARNING] Detected Password in query param: 'p******d'</span>
+                </div>
+                <div class="terminal-line">
+                    <span class="terminal-prompt">▸</span>
+                    <span class="terminal-danger">[ALERT] High Entropy String (4.62 bits): '7f8a9e2d1c...'</span>
+                </div>
+                <div class="terminal-line">
+                    <span class="terminal-prompt">✓</span>
+                    <span class="terminal-success">Scan Completed: 0 cleartext leaks persisted. Sanitized report generated.</span>
+                </div>
+            </div>
+        </div>
     </div>
-
 </section>
-<section class="features">
 
-    <h2>Key Features</h2>
+<!-- Key Features -->
+<section class="features">
+    <div class="section-header">
+        <span class="section-tag">High-Precision Detection</span>
+        <h2 class="section-title">Built for Modern Security Pipelines</h2>
+        <p class="section-desc">Comprehensive rule-set covering credential disclosures, token leaks, and system exposure.</p>
+    </div>
 
     <div class="feature-container">
-
         <div class="feature-card">
-
-            <h3>📧 Email Detection</h3>
-
-            <p>Detect email addresses from log files using Regular Expressions.</p>
-
+            <div class="card-icon">📧</div>
+            <h3>Email Address Detection</h3>
+            <p>Identifies personal and corporate email addresses exposed across access logs and stack traces.</p>
         </div>
 
         <div class="feature-card">
-
-            <h3>🔑 API Key Detection</h3>
-
-            <p>Identify API keys and access tokens to prevent data leakage.</p>
-
+            <div class="card-icon">🔑</div>
+            <h3>API Keys & Secret Tokens</h3>
+            <p>Detects AWS access keys, GitHub personal access tokens, OpenAI keys, and authorization headers.</p>
         </div>
 
         <div class="feature-card">
-
-            <h3>🔐 Password Detection</h3>
-
-            <p>Detect passwords stored inside log files.</p>
-
+            <div class="card-icon">🔐</div>
+            <h3>Password & Credential Leaks</h3>
+            <p>Finds passwords inadvertently printed in query strings, JSON payloads, or authentication debug logs.</p>
         </div>
 
+        <div class="feature-card">
+            <div class="card-icon">🌐</div>
+            <h3>IP & Host Infrastructure</h3>
+            <p>Captures internal and external IPv4 addresses, helping avoid unintended infrastructure topology leaks.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="card-icon">⚠️</div>
+            <h3>High-Entropy Analysis</h3>
+            <p>Uses Shannon entropy algorithms to spot randomized cryptographic keys, salts, and base64 secrets.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="card-icon">🛡️</div>
+            <h3>Data Masking & Redaction</h3>
+            <p>Safely masks findings with automated redaction so sensitive values are never leaked in preview reports.</p>
+        </div>
+    </div>
+</section>
+
+<!-- System Architecture Section -->
+<section class="architecture">
+    <div class="section-header">
+        <span class="section-tag">System Design</span>
+        <h2 class="section-title">End-to-End Scanning Workflow</h2>
+        <p class="section-desc">How DataSniff ingests, parses, matches, and masks sensitive data safely.</p>
     </div>
 
+    <div class="architecture-content">
+        <div class="architecture-image">
+            <img src="{{ url_for('static', filename='images/architecture.png') }}" alt="DataSniff Architecture Flow" onerror="this.style.display='none'">
+        </div>
+
+        <div class="architecture-text">
+            <div class="flow-card">
+                <h3>1. Ingestion & Validation</h3>
+                <p>Accepts raw TXT, LOG, or JSON logs up to 10MB with strict MIME and size checks.</p>
+            </div>
+
+            <div class="flow-card">
+                <h3>2. Pattern Matching & Entropy</h3>
+                <p>Applies high-speed compiled Regular Expressions and statistical entropy scoring across every log line.</p>
+            </div>
+
+            <div class="flow-card">
+                <h3>3. Redaction & Deduplication</h3>
+                <p>Eliminates duplicate findings and masks all identified credentials with <code>[REDACTED]</code> tags.</p>
+            </div>
+
+            <div class="flow-card">
+                <h3>4. Risk Assessment & Reporting</h3>
+                <p>Computes risk level (Low, Medium, High) and generates exportable JSON audit reports instantly.</p>
+            </div>
+        </div>
+    </div>
 </section>
-<footer>
 
-    <p>
-
-        © 2026 DataSniff | Log and Data Leak Detector
-
-    </p>
-
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-status">
+            <span class="status-dot"></span>
+            <span>All Detectors Operational</span>
+        </div>
+        <p class="footer-copy">
+            © 2026 DataSniff | Log and Data Leak Detector · Open Source Security Initiative
+        </p>
+    </div>
 </footer>
 
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
-
 </html>

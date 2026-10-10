@@ -1,102 +1,113 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Scan Log File | DataSniff</title>
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
-
-    <style>
-        .error-message {
-            background: #ffe5e5;
-            color: #b42318;
-            border: 1px solid #f5a5a5;
-            padding: 12px 16px;
-            margin: 16px 0;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        .upload-info {
-            font-size: 14px;
-            color: #777;
-            margin-top: 12px;
-        }
-
-        .file-input {
-            max-width: 100%;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
 </head>
 
 <body>
 
 <header>
     <nav class="navbar">
-
-        <div class="logo">DataSniff</div>
+        <a href="/" class="logo-group">
+            <span class="logo-icon">🛡️</span>
+            <span class="logo-text">DataSniff</span>
+            <span class="logo-tag">Security v1.0</span>
+        </a>
 
         <ul class="menu">
             <li><a href="/">Home</a></li>
-            <li><a href="/scan">Scan</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/scan" class="active">Scan</a></li>
             <li><a href="/reports">Reports</a></li>
             <li><a href="/about">About</a></li>
             <li><a href="/contact">Contact</a></li>
         </ul>
 
+        <a href="/dashboard" class="nav-cta">
+            <span>📊 Dashboard</span>
+        </a>
     </nav>
 </header>
 
 <section class="scan-section">
-
-    <div class="container">
-
-        <h1>Upload Log File</h1>
+    <div class="scan-card">
+        <h1>Scan Log File</h1>
+        <p class="scan-desc">
+            Upload your application, server, or database log to detect sensitive credentials and secret disclosures.
+        </p>
 
         {% if error %}
         <div class="error-message" role="alert">
-            {{ error }}
+            <span>⚠️</span>
+            <div>{{ error }}</div>
         </div>
         {% endif %}
 
-        <p>
-            Upload a <b>.txt</b>, <b>.log</b> or <b>.json</b>
-            file to scan for sensitive data.
-        </p>
+        <form action="/scan-file" method="POST" enctype="multipart/form-data" id="scanForm">
+            <!-- Modern Drag & Drop Upload Zone -->
+            <div class="upload-dropzone" id="uploadDropzone">
+                <input
+                    class="file-input-hidden"
+                    type="file"
+                    name="logfile"
+                    id="logfile"
+                    accept=".txt,.log,.json"
+                    required
+                >
+                <div class="dropzone-icon">📁</div>
+                <div class="dropzone-text">Choose a file or drag & drop it here</div>
+                <div class="dropzone-subtext">Click anywhere in this box to browse your computer</div>
 
-        <form action="/scan-file"
-              method="POST"
-              enctype="multipart/form-data">
+                <div class="file-selected-badge" id="fileSelectedBadge">
+                    <span>📄 Selected:</span>
+                    <span id="fileNameDisplay" class="mono-font">None</span>
+                </div>
+            </div>
 
-            <input
-                class="file-input"
-                type="file"
-                name="logfile"
-                accept=".txt,.log,.json"               
-                required
-            >
+            <div class="upload-meta">
+                <div class="meta-item">
+                    <span>📑 Formats:</span>
+                    <strong>.TXT, .LOG, .JSON</strong>
+                </div>
+                <div class="meta-item">
+                    <span>⚖️ Max Size:</span>
+                    <strong>10 MB</strong>
+                </div>
+                <div class="meta-item">
+                    <span>🛡️ Protection:</span>
+                    <strong>Auto-Redacted</strong>
+                </div>
+            </div>
 
-            <p class="upload-info">
-                Supported formats: TXT, LOG, JSON<br>
-                Maximum file size: 5 MB
-            </p>
-
-            <br>
-
-            <button type="submit">
-                Scan File
+            <button type="submit" class="button" style="width: 100%; max-width: 320px; margin: 0 auto;">
+                🚀 Scan File Now
             </button>
-
         </form>
 
+        <div class="security-assurance">
+            <span>🔒</span>
+            <span>Zero Data Retention: Uploaded files are removed immediately from disk after in-memory analysis.</span>
+        </div>
     </div>
-
 </section>
 
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-status">
+            <span class="status-dot"></span>
+            <span>All Detectors Operational</span>
+        </div>
+        <p class="footer-copy">
+            © 2026 DataSniff | Log and Data Leak Detector
+        </p>
+    </div>
+</footer>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

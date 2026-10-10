@@ -2,89 +2,122 @@
 <html lang="en">
 
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>About DataSniff</title>
-
-<link rel="stylesheet"
-href="{{ url_for('static', filename='style.css') }}">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | DataSniff</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
 </head>
 
 <body>
 
 <header>
+    <nav class="navbar">
+        <a href="/" class="logo-group">
+            <span class="logo-icon">🛡️</span>
+            <span class="logo-text">DataSniff</span>
+            <span class="logo-tag">Security v1.0</span>
+        </a>
 
-<nav class="navbar">
+        <ul class="menu">
+            <li><a href="/">Home</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/scan">Scan</a></li>
+            <li><a href="/reports">Reports</a></li>
+            <li><a href="/about" class="active">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+        </ul>
 
-<div class="logo">DataSniff</div>
-
-<ul class="menu">
-
-<li><a href="/">Home</a></li>
-
-<li><a href="/scan">Scan</a></li>
-
- <li><a href="/reports">Reports</a></li>
-
-<li><a href="/about">About</a></li>
-
-<li><a href="/contact">Contact</a></li>
-
-</ul>
-
-</nav>
-
+        <a href="/scan" class="nav-cta">
+            <span>⚡ Start Scan</span>
+        </a>
+    </nav>
 </header>
 
-<section class="about">
+<main class="about-page">
+    <h1>About DataSniff</h1>
+    <p class="about-desc">
+        DataSniff is an automated Log and Sensitive Data Leak Detector designed to prevent inadvertent credential disclosure and sensitive information exposure in server logs.
+    </p>
 
-<div class="container">
+    <!-- Project Objectives -->
+    <section class="panel" style="margin-bottom: 30px;">
+        <h2>🎯 Project Objectives</h2>
+        <div class="objectives-grid">
+            <div class="objective-item">
+                <span>📧</span>
+                <span>Detect Disclosed Email Addresses</span>
+            </div>
+            <div class="objective-item">
+                <span>🔐</span>
+                <span>Detect Plaintext Passwords & Hashes</span>
+            </div>
+            <div class="objective-item">
+                <span>🔑</span>
+                <span>Identify API Keys & Cloud Credentials</span>
+            </div>
+            <div class="objective-item">
+                <span>🐙</span>
+                <span>Identify GitHub Personal Access Tokens</span>
+            </div>
+            <div class="objective-item">
+                <span>📱</span>
+                <span>Spot Phone Numbers & Contact Details</span>
+            </div>
+            <div class="objective-item">
+                <span>🌐</span>
+                <span>Identify Exposed IPv4 Addresses</span>
+            </div>
+            <div class="objective-item">
+                <span>⚠️</span>
+                <span>Detect High-Entropy Cryptographic Secrets</span>
+            </div>
+            <div class="objective-item">
+                <span>🛡️</span>
+                <span>Prevent Accidental Corporate Data Breaches</span>
+            </div>
+        </div>
+    </section>
 
-<h1>About DataSniff</h1>
+    <!-- Core Technologies -->
+    <section class="panel" style="margin-bottom: 30px;">
+        <h2>🛠️ Core Technologies & Algorithms</h2>
+        <p class="muted">Built with robust, light-weight technologies for high performance and zero external leaks.</p>
 
-<p>
+        <div class="tech-badges">
+            <span class="tech-badge">🐍 Python 3</span>
+            <span class="tech-badge">🌶️ Flask Framework</span>
+            <span class="tech-badge">🔍 Regular Expressions (Regex)</span>
+            <span class="tech-badge">📊 Shannon Entropy Analysis</span>
+            <span class="tech-badge">🛡️ Automated Data Masking</span>
+            <span class="tech-badge">⚡ HTML5 & Modern CSS3</span>
+            <span class="tech-badge">📈 Chart.js Data Visualizations</span>
+            <span class="tech-badge">📑 JSON Audit Reports</span>
+        </div>
+    </section>
 
-DataSniff is a Python-based Log and Data Leak Detector developed to identify
-sensitive information from log files.
+    <div style="text-align: center; margin-top: 35px;">
+        <a href="/scan" class="button">
+            🚀 Try DataSniff Scanner
+        </a>
+        <a href="/contact" class="button secondary">
+            📩 Contact Developer
+        </a>
+    </div>
+</main>
 
-</p>
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-status">
+            <span class="status-dot"></span>
+            <span>All Detectors Operational</span>
+        </div>
+        <p class="footer-copy">
+            © 2026 DataSniff | Log and Data Leak Detector · All Rights Reserved
+        </p>
+    </div>
+</footer>
 
-<h2>Project Objectives</h2>
-
-<ul>
-
-<li>Detect Email Addresses</li>
-
-<li>Detect Passwords</li>
-
-<li>Detect API Keys</li>
-
-<li>Detect GitHub Tokens</li>
-
-<li>Detect Phone Numbers</li>
-
-<li>Detect IP Addresses</li>
-
-<li>Reduce accidental data leakage</li>
-
-</ul>
-
-<h2>Technologies Used</h2>
-
-<p>
-
-Python, Flask, HTML, CSS, JavaScript, Regular Expressions (Regex),
-Pattern Matching and Entropy Analysis.
-
-</p>
-
-</div>
-
-</section>
-
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
-
 </html>

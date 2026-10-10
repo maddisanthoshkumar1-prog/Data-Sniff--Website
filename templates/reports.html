@@ -1,228 +1,80 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reports - DataSniff</title>
-
+    <title>Scan Reports | DataSniff</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
-    <style>
-        .reports-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 25px 20px 60px;
-        }
-
-        .reports-heading {
-            text-align: center;
-            color: #00e5ff;
-            margin-top: 100px;
-            margin-bottom: 10px;
-        }
-
-        .reports-subtitle {
-            text-align: center;
-            color: #cbd5e1;
-            margin-bottom: 30px;
-        }
-
-        .report-tools {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 25px;
-            padding: 18px;
-            background: rgba(17, 24, 39, 0.95);
-            border: 1px solid #263244;
-            border-radius: 12px;
-        }
-
-        .report-tools input,
-        .report-tools select {
-            flex: 1;
-            min-width: 180px;
-            padding: 12px;
-            border: 1px solid #475569;
-            border-radius: 7px;
-            background: #0b1120;
-            color: #e5e7eb;
-            font-size: 15px;
-        }
-
-        .report-card {
-            margin-bottom: 18px;
-            padding: 22px;
-            background: rgba(17, 24, 39, 0.95);
-            border: 1px solid #263244;
-            border-radius: 12px;
-            color: #e5e7eb;
-            overflow-wrap: anywhere;
-        }
-
-        .report-card h2 {
-            color: #00e5ff;
-            margin-top: 0;
-        }
-
-        .report-card p {
-            line-height: 1.6;
-        }
-
-        .report-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 18px;
-        }
-
-        .report-btn {
-            display: inline-block;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 7px;
-            text-decoration: none;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .view-btn {
-            background: #0284c7;
-            color: white;
-        }
-
-        .delete-btn {
-            background: #991b1b;
-            color: white;
-        }
-
-        .report-btn:hover {
-            opacity: 0.85;
-        }
-
-        .risk-badge {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: bold;
-        }
-
-        .risk-high {
-            background: #451a1a;
-            color: #fca5a5;
-        }
-
-        .risk-medium {
-            background: #422006;
-            color: #fcd34d;
-        }
-
-        .risk-low {
-            background: #052e16;
-            color: #86efac;
-        }
-
-        .empty-message {
-            text-align: center;
-            color: #cbd5e1;
-            padding: 30px 10px;
-        }
-
-        #visibleCount {
-            color: #cbd5e1;
-            margin: 15px 0;
-        }
-
-        @media (max-width: 600px) {
-            .reports-heading {
-                margin-top: 55px;
-            }
-
-            .report-tools {
-                padding: 12px;
-            }
-
-            .report-card {
-                padding: 17px;
-            }
-        }
-    </style>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
 </head>
 
 <body>
 
-    <header>
-        <nav class="navbar">
-            <div class="logo">DataSniff</div>
+<header>
+    <nav class="navbar">
+        <a href="/" class="logo-group">
+            <span class="logo-icon">🛡️</span>
+            <span class="logo-text">DataSniff</span>
+            <span class="logo-tag">Security v1.0</span>
+        </a>
 
-            <ul class="menu">
-                <li><a href="/">Home</a></li>
-                <li><a href="/dashboard">Dashboard</a></li>
-                <li><a href="/scan">Scan</a></li>
-                <li><a href="/reports">Reports</a></li>
-                <li><a href="/about">About</a></li>
-                <li><a href="/contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+        <ul class="menu">
+            <li><a href="/">Home</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/scan">Scan</a></li>
+            <li><a href="/reports" class="active">Reports</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+        </ul>
 
-    <main class="reports-container">
+        <a href="/scan" class="nav-cta">
+            <span>⚡ Start Scan</span>
+        </a>
+    </nav>
+</header>
 
-        <h1 class="reports-heading">Previous Scan Reports</h1>
+<main class="reports-container">
+    <h1 class="reports-heading">Previous Scan Reports</h1>
+    <p class="reports-subtitle">
+        Search, filter and manage your DataSniff historical log audits.
+    </p>
 
-        <p class="reports-subtitle">
-            Search, filter and manage your DataSniff scan history.
-        </p>
+    <!-- Search & Filter Controls -->
+    <div class="report-tools">
+        <input
+            type="search"
+            id="reportSearch"
+            placeholder="🔍 Search reports by file name..."
+            aria-label="Search reports by file name"
+        >
 
-        <div class="report-tools">
-            <input
-                type="search"
-                id="reportSearch"
-                placeholder="Search by file name..."
-                aria-label="Search reports by file name"
-            >
+        <select id="riskFilter" aria-label="Filter reports by risk level">
+            <option value="ALL">All Risk Levels</option>
+            <option value="HIGH">High Risk Only 🔴</option>
+            <option value="MEDIUM">Medium Risk Only 🟡</option>
+            <option value="LOW">Low Risk Only 🟢</option>
+        </select>
+    </div>
 
-            <select id="riskFilter" aria-label="Filter reports by risk">
-                <option value="ALL">All Risk Levels</option>
-                <option value="HIGH">High Risk</option>
-                <option value="MEDIUM">Medium Risk</option>
-                <option value="LOW">Low Risk</option>
-            </select>
-        </div>
+    <p id="visibleCount">
+        Showing {{ total_reports }} reports
+    </p>
 
-        <p id="visibleCount">
-            Showing {{ total_reports }} reports
-        </p>
-
-        <div id="reportsList">
-
-            {% if reports %}
-
-                {% for report in reports %}
-
-                    {% set risk = report.get("risk_level", "UNKNOWN") %}
-
-                    <article
-                        class="report-card"
-                        data-filename="{{ report.get('file_name', '')|lower }}"
-                        data-risk="{{ risk.split()[0]|upper }}"
-                    >
-
-                        <h2>
+    <div id="reportsList">
+        {% if reports %}
+            {% for report in reports %}
+                {% set risk = report.get("risk_level", "UNKNOWN") %}
+                <article
+                    class="report-card"
+                    data-filename="{{ report.get('file_name', '')|lower }}"
+                    data-risk="{{ risk.split()[0]|upper }}"
+                >
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 12px;">
+                        <h2 style="margin: 0;">
                             📄 {{ report.get("file_name", "Unknown file") }}
                         </h2>
-
-                        <p>
-                            <strong>Date:</strong>
-                            {{ report.get("date", "Unknown") }}
-                        </p>
-
-                        <p>
-                            <strong>Risk Level:</strong>
-
+                        <div>
                             {% if risk.startswith("HIGH") %}
                                 <span class="risk-badge risk-high">{{ risk }}</span>
                             {% elif risk.startswith("MEDIUM") %}
@@ -232,102 +84,100 @@
                             {% else %}
                                 <span class="risk-badge">{{ risk }}</span>
                             {% endif %}
-                        </p>
-
-                        <p>
-                            <strong>Categories Detected:</strong>
-                            {{ report.get("results", {})|length }}
-                        </p>
-
-                        <div class="report-actions">
-                            <a
-                                class="report-btn view-btn"
-                                href="{{ url_for('report_detail', filename=report.get('_report_id', '')) }}"
-                            >
-                                View Report
-                            </a>
-
-                            <form
-                                method="POST"
-                                action="{{ url_for('delete_report', filename=report.get('_report_id', '')) }}"
-                                onsubmit="return confirm('Delete this report permanently?');"
-                            >
-                                <button type="submit" class="report-btn delete-btn">
-                                    Delete Report
-                                </button>
-                            </form>
                         </div>
+                    </div>
 
-                    </article>
+                    <p><strong>Scan Timestamp:</strong> {{ report.get("date", "Unknown") }}</p>
+                    <p><strong>Detected Categories:</strong> {{ report.get("results", {})|length }} sensitive groups identified</p>
 
-                {% endfor %}
+                    <div class="report-actions">
+                        <a
+                            class="report-btn view-btn"
+                            href="{{ url_for('report_detail', filename=report.get('_report_id', '')) }}"
+                        >
+                            👁️ View Detailed Report
+                        </a>
 
-            {% else %}
+                        <form
+                            method="POST"
+                            action="{{ url_for('delete_report', filename=report.get('_report_id', '')) }}"
+                            onsubmit="return confirm('Delete this report permanently?');"
+                            style="margin: 0;"
+                        >
+                            <button type="submit" class="report-btn delete-btn">
+                                🗑️ Delete Report
+                            </button>
+                        </form>
+                    </div>
+                </article>
+            {% endfor %}
+        {% else %}
+            <div class="empty-message panel" style="text-align: center; padding: 48px 24px;">
+                <div style="font-size: 40px; margin-bottom: 14px;">📭</div>
+                <h2 style="margin-bottom: 8px;">No Audit Reports Found</h2>
+                <p class="muted" style="margin-bottom: 24px;">Scan your first log file to generate a structured vulnerability report.</p>
+                <a class="button" href="/scan">Scan a File Now</a>
+            </div>
+        {% endif %}
 
-                <div class="contact-card empty-message">
-                    <h2>No Reports Found</h2>
-                    <p>Scan a log file to generate your first report.</p>
-                    <a class="report-btn view-btn" href="/scan">Scan a File</a>
-                </div>
+        <p id="noMatches" class="panel empty" hidden>
+            🔍 No reports match your active search query or risk filter.
+        </p>
+    </div>
+</main>
 
-            {% endif %}
-
-            <p id="noMatches" class="empty-message" hidden>
-                No reports match your search or risk filter.
-            </p>
-
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-status">
+            <span class="status-dot"></span>
+            <span>All Detectors Operational</span>
         </div>
+        <p class="footer-copy">
+            © 2026 DataSniff | Log and Data Leak Detector
+        </p>
+    </div>
+</footer>
 
-    </main>
+<script>
+    const searchInput = document.getElementById("reportSearch");
+    const riskFilter = document.getElementById("riskFilter");
+    const reportCards = Array.from(document.querySelectorAll(".report-card"));
+    const visibleCount = document.getElementById("visibleCount");
+    const noMatches = document.getElementById("noMatches");
 
-    <footer>
-        <div class="container">
-            <h2>DataSniff</h2>
-            <p>Log and Data Leak Detector</p>
-            <p>© 2026 All Rights Reserved.</p>
-        </div>
-    </footer>
+    function filterReports() {
+        const searchText = searchInput.value.trim().toLowerCase();
+        const selectedRisk = riskFilter.value;
+        let visible = 0;
 
-    <script>
-        const searchInput = document.getElementById("reportSearch");
-        const riskFilter = document.getElementById("riskFilter");
-        const reportCards = Array.from(
-            document.querySelectorAll(".report-card")
-        );
-        const visibleCount = document.getElementById("visibleCount");
-        const noMatches = document.getElementById("noMatches");
+        reportCards.forEach(card => {
+            const filename = card.dataset.filename || "";
+            const risk = card.dataset.risk || "";
 
-        function filterReports() {
-            const searchText = searchInput.value.trim().toLowerCase();
-            const selectedRisk = riskFilter.value;
-            let visible = 0;
+            const matchesName = filename.includes(searchText);
+            const matchesRisk = selectedRisk === "ALL" || risk === selectedRisk;
 
-            reportCards.forEach(card => {
-                const filename = card.dataset.filename || "";
-                const risk = card.dataset.risk || "";
+            const show = matchesName && matchesRisk;
+            card.hidden = !show;
 
-                const matchesName = filename.includes(searchText);
-                const matchesRisk =
-                    selectedRisk === "ALL" || risk === selectedRisk;
+            if (show) visible++;
+        });
 
-                const show = matchesName && matchesRisk;
-
-                card.hidden = !show;
-
-                if (show) visible++;
-            });
-
-            visibleCount.textContent =
-                `Showing ${visible} of ${reportCards.length} reports`;
-
-            noMatches.hidden = visible !== 0;
+        if (visibleCount) {
+            visibleCount.textContent = `Showing ${visible} of ${reportCards.length} reports`;
         }
 
+        if (noMatches) {
+            noMatches.hidden = visible !== 0;
+        }
+    }
+
+    if (searchInput && riskFilter) {
         searchInput.addEventListener("input", filterReports);
         riskFilter.addEventListener("change", filterReports);
-
         filterReports();
-    </script>
-
+    }
+</script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

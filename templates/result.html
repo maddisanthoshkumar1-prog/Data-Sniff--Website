@@ -2,83 +2,137 @@
 <html lang="en">
 
 <head>
-
-<meta charset="UTF-8">
-
-<title>DataSniff Results</title>
-
-<link rel="stylesheet"
-href="{{ url_for('static', filename='style.css') }}">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan Results | DataSniff</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
 </head>
 
 <body>
 
-<div class="container">
+<header>
+    <nav class="navbar">
+        <a href="/" class="logo-group">
+            <span class="logo-icon">🛡️</span>
+            <span class="logo-text">DataSniff</span>
+            <span class="logo-tag">Security v1.0</span>
+        </a>
 
-<h1>DataSniff Scan Report</h1>
+        <ul class="menu">
+            <li><a href="/">Home</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/scan" class="active">Scan</a></li>
+            <li><a href="/reports">Reports</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+        </ul>
 
-<div class="result-card">
+        <a href="/scan" class="nav-cta">
+            <span>⚡ Start Scan</span>
+        </a>
+    </nav>
+</header>
 
-<h2>Summary</h2>
+<main class="result-container">
+    <div style="margin-bottom: 28px; text-align: center;">
+        <span class="hero-pill">
+            <span class="pulse-dot"></span>
+            <span>AUDIT COMPLETED</span>
+        </span>
+        <h1 style="font-size: 32px; font-weight: 800; margin-bottom: 8px;">
+            DataSniff Scan Report
+        </h1>
+        <p class="muted">
+            Log file parsed and evaluated. Sensitive data matches are masked below for safety.
+        </p>
+    </div>
 
-<p><strong>Total Sensitive Items Found:</strong> {{ total }}</p>
+    <!-- Summary Card -->
+    <div class="result-card" style="border-top: 3px solid var(--cyan-primary);">
+        <h2>📊 Summary Overview</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin-top: 14px;">
+            <div>
+                <span class="muted" style="font-size: 13px;">TOTAL SENSITIVE ITEMS</span>
+                <p style="font-size: 28px; font-weight: 800; color: var(--cyan-primary); margin: 0;">{{ total }}</p>
+            </div>
+            <div>
+                <span class="muted" style="font-size: 13px;">RISK ASSESSMENT</span>
+                <p style="font-size: 20px; font-weight: 700; margin-top: 4px;">
+                    {% if risk.startswith("HIGH") %}
+                        <span class="risk-badge risk-high">{{ risk }}</span>
+                    {% elif risk.startswith("MEDIUM") %}
+                        <span class="risk-badge risk-medium">{{ risk }}</span>
+                    {% elif risk.startswith("LOW") %}
+                        <span class="risk-badge risk-low">{{ risk }}</span>
+                    {% else %}
+                        <span class="risk-badge">{{ risk }}</span>
+                    {% endif %}
+                </p>
+            </div>
+            <div>
+                <span class="muted" style="font-size: 13px;">STATUS</span>
+                <p style="font-size: 14px; font-weight: 600; color: var(--risk-low); margin-top: 8px;">Report Saved Automatically</p>
+            </div>
+        </div>
+    </div>
 
-<p><strong>Risk Level:</strong> {{ risk }}</p>
+    <!-- Category Breakdowns -->
+    {% for category, items in results.items() %}
+    <div class="result-card">
+        <h2>
+            {% if category == "Emails" %}📧
+            {% elif category == "Passwords" %}🔐
+            {% elif category == "API Keys" %}🔑
+            {% elif category == "IP Addresses" %}🌐
+            {% elif category == "Phone Numbers" %}📱
+            {% elif category == "GitHub Tokens" %}🐙
+            {% elif category == "High Entropy Strings" %}⚠️
+            {% else %}🛡️{% endif %}
+            {{ category }}
+            <span style="font-size: 13px; font-weight: 600; padding: 2px 10px; border-radius: var(--radius-full); background: rgba(56, 189, 248, 0.12); color: var(--cyan-light); margin-left: auto;">
+                {{ items|length }} found
+            </span>
+        </h2>
 
-</div>
+        {% if items %}
+            <ul>
+                {% for item in items %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="muted" style="margin: 0; font-size: 14px;">No {{ category }} detected in this file.</p>
+        {% endif %}
+    </div>
+    {% endfor %}
 
-{% for category, items in results.items() %}
+    <!-- Action Buttons -->
+    <div style="display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-top: 32px;">
+        <a href="/scan" class="button">
+            ⚡ Scan Another File
+        </a>
+        <a href="/reports" class="button secondary">
+            📁 View All Saved Reports
+        </a>
+        <a href="/dashboard" class="button secondary">
+            📊 Go to Dashboard
+        </a>
+    </div>
+</main>
 
-<div class="result-card">
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-status">
+            <span class="status-dot"></span>
+            <span>All Detectors Operational</span>
+        </div>
+        <p class="footer-copy">
+            © 2026 DataSniff | Log and Data Leak Detector
+        </p>
+    </div>
+</footer>
 
-<h2><h2>
-{% if category == "Emails" %}
-📧
-{% elif category == "Passwords" %}
-🔐
-{% elif category == "API Keys" %}
-🔑
-{% elif category == "IP Addresses" %}
-🌐
-{% elif category == "Phone Numbers" %}
-📱
-{% elif category == "GitHub Tokens" %}
-🐙
-{% elif category == "High Entropy Strings" %}
-⚠️
-{% endif %}
-{{ category }}
-</h2>
-
-{% if items %}
-
-<ul>
-
-{% for item in items %}
-
-<li>{{ item }}</li>
-
-{% endfor %}
-
-</ul>
-
-{% else %}
-
-<p>No {{ category }} Found.</p>
-
-{% endif %}
-
-</div>
-
-{% endfor %}
-
-<br>
-
-<a href="/scan">⬅ Scan Another File</a>
-
-</div>
-
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
-
 </html>
