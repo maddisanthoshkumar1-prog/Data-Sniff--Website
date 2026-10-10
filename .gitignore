@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# Environment secrets
+.env
+.env.*
+!.env.example
+
+# Generated files
+uploads/*
+reports/*
+!uploads/.gitkeep
+!reports/.gitkeep
+
+# Logs and temporary files
+*.log
+*.tmp
+DataSniff_*.json
+
+# Editor settings
+.vscode/
+
+# Test cache
+.pytest_cache/

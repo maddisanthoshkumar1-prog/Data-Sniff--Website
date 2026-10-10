@@ -1,0 +1,580 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b1120">
+
+    <title>DataSniff | Security Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0b1120;
+            color: #e5e7eb;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            padding: 20px 6%;
+            background: #111827;
+            border-bottom: 1px solid #263244;
+        }
+
+        nav h2 {
+            margin: 0;
+            color: #38bdf8;
+        }
+
+        nav a {
+            color: #cbd5e1;
+            text-decoration: none;
+            margin-left: 18px;
+            transition: color 0.2s;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #38bdf8;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: auto;
+            padding: 35px 6%;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(175px, 1fr)
+            );
+            gap: 18px;
+            margin: 28px 0;
+        }
+
+        .card,
+        .panel {
+            background: #111827;
+            border: 1px solid #263244;
+            border-radius: 14px;
+            padding: 22px;
+        }
+
+        .card {
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: #475569;
+        }
+
+        .card p {
+            color: #94a3b8;
+            margin: 0 0 12px;
+        }
+
+        .card h2 {
+            font-size: 32px;
+            margin: 0;
+        }
+
+        .blue {
+            color: #38bdf8;
+        }
+
+        .red {
+            color: #f87171;
+        }
+
+        .yellow {
+            color: #fbbf24;
+        }
+
+        .green {
+            color: #4ade80;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+            margin-bottom: 24px;
+        }
+
+        .panel h2 {
+            margin-top: 0;
+        }
+
+        .risk-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin: 22px 0;
+        }
+
+        .risk-label {
+            font-weight: bold;
+        }
+
+        .risk-count {
+            color: #cbd5e1;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 9px;
+            border-radius: 20px;
+            background: #263244;
+            overflow: hidden;
+            margin-top: 9px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.4s ease;
+        }
+
+        .high-fill {
+            background: #f87171;
+        }
+
+        .medium-fill {
+            background: #fbbf24;
+        }
+
+        .low-fill {
+            background: #4ade80;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 360px;
+            height: 300px;
+            margin: 10px auto 0;
+        }
+
+        .chart-fallback {
+            text-align: center;
+            color: #94a3b8;
+            padding: 20px;
+        }
+
+        .panel {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 18px;
+            text-align: left;
+        }
+
+        th,
+        td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #263244;
+        }
+
+        th {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        tbody tr {
+            transition: background 0.2s;
+        }
+
+        tbody tr:hover {
+            background: #182235;
+        }
+
+        .risk-badge {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .risk-high {
+            background: #451a1a;
+            color: #fca5a5;
+        }
+
+        .risk-medium {
+            background: #422006;
+            color: #fcd34d;
+        }
+
+        .risk-low {
+            background: #052e16;
+            color: #86efac;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 17px;
+            border-radius: 8px;
+            background: #0284c7;
+            color: white;
+            text-decoration: none;
+            margin: 18px 8px 0 0;
+            transition: background 0.2s;
+        }
+
+        .button:hover {
+            background: #0369a1;
+        }
+
+        .button.secondary {
+            background: #263244;
+        }
+
+        .button.secondary:hover {
+            background: #334155;
+        }
+
+        .empty {
+            color: #94a3b8;
+            padding: 20px 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        @media (max-width: 760px) {
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                align-items: flex-start;
+            }
+
+            nav div {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 14px;
+            }
+
+            nav a {
+                margin-left: 0;
+            }
+
+            main {
+                padding: 25px 5%;
+            }
+
+            .card,
+            .panel {
+                padding: 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cards {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .card h2 {
+                font-size: 26px;
+            }
+
+            .card p {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <h2>🛡️ DataSniff</h2>
+
+        <div>
+            <a href="/">Home</a>
+            <a href="/dashboard" class="active">Dashboard</a>
+            <a href="/scan">Scan</a>
+            <a href="/reports">Reports</a>
+            <a href="/about">About</a>
+        </div>
+    </nav>
+
+    <main>
+        <h1>Security Dashboard</h1>
+
+        <p class="subtitle">
+            Monitor your log scans and detected sensitive information.
+        </p>
+
+        <!-- Statistics Cards -->
+        <div class="cards">
+
+            <div class="card">
+                <p>Total Scans</p>
+                <h2 class="blue">{{ total_scans }}</h2>
+            </div>
+
+            <div class="card">
+                <p>Sensitive Findings</p>
+                <h2>{{ total_findings }}</h2>
+            </div>
+
+            <div class="card">
+                <p>High Risk Reports</p>
+                <h2 class="red">{{ high_risk }}</h2>
+            </div>
+
+            <div class="card">
+                <p>Medium Risk Reports</p>
+                <h2 class="yellow">{{ medium_risk }}</h2>
+            </div>
+
+            <div class="card">
+                <p>Low Risk Reports</p>
+                <h2 class="green">{{ low_risk }}</h2>
+            </div>
+
+        </div>
+
+        <!-- Risk Analytics -->
+        <div class="analytics-grid">
+
+            <section class="panel">
+                <h2>Risk Overview</h2>
+
+                {% set risk_total = high_risk + medium_risk + low_risk %}
+
+                {% if risk_total > 0 %}
+
+                    <div class="risk-item">
+                        <span class="risk-label red">HIGH RISK</span>
+                        <span class="risk-count">{{ high_risk }} reports</span>
+                    </div>
+
+                    <div class="progress-track">
+                        <div
+                            class="progress-fill high-fill"
+                            style="width: {{ (high_risk / risk_total * 100)|round(1) }}%;">
+                        </div>
+                    </div>
+
+                    <div class="risk-item">
+                        <span class="risk-label yellow">MEDIUM RISK</span>
+                        <span class="risk-count">{{ medium_risk }} reports</span>
+                    </div>
+
+                    <div class="progress-track">
+                        <div
+                            class="progress-fill medium-fill"
+                            style="width: {{ (medium_risk / risk_total * 100)|round(1) }}%;">
+                        </div>
+                    </div>
+
+                    <div class="risk-item">
+                        <span class="risk-label green">LOW RISK</span>
+                        <span class="risk-count">{{ low_risk }} reports</span>
+                    </div>
+
+                    <div class="progress-track">
+                        <div
+                            class="progress-fill low-fill"
+                            style="width: {{ (low_risk / risk_total * 100)|round(1) }}%;">
+                        </div>
+                    </div>
+
+                {% else %}
+                    <p class="empty">No risk data available yet.</p>
+                {% endif %}
+            </section>
+
+            <section class="panel">
+                <h2>Risk Distribution</h2>
+
+                <div class="chart-container">
+                    <canvas id="riskChart"
+                        role="img"
+                        aria-label="Doughnut chart showing high, medium and low risk reports">
+                    </canvas>
+                </div>
+
+                <p id="chartFallback" class="chart-fallback" hidden>
+                    Chart unavailable. Check your internet connection.
+                </p>
+            </section>
+
+        </div>
+
+        <!-- Recent Scan History -->
+        <section class="panel">
+            <h2>Recent Scans</h2>
+
+            {% if recent_reports %}
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>File Name</th>
+                            <th>Date</th>
+                            <th>Risk Level</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for report in recent_reports %}
+                            {% set level = report.get("risk_level", "UNKNOWN") %}
+
+                            <tr>
+                                <td>{{ report.get("file_name", "Unknown") }}</td>
+                                <td>
+    <a
+        href="{{ url_for('report_detail', filename=report.get('_report_id', '')) }}"
+        style="color: #38bdf8; text-decoration: none;"
+    >
+        {{ report.get("file_name", "Unknown") }}
+    </a>
+</td>
+                                <td>{{ report.get("date", "Unknown") }}</td>
+
+                                <td>
+                                    {% if level.startswith("HIGH") %}
+                                        <span class="risk-badge risk-high">
+                                            {{ level }}
+                                        </span>
+                                    {% elif level.startswith("MEDIUM") %}
+                                        <span class="risk-badge risk-medium">
+                                            {{ level }}
+                                        </span>
+                                    {% elif level.startswith("LOW") %}
+                                        <span class="risk-badge risk-low">
+                                            {{ level }}
+                                        </span>
+                                    {% else %}
+                                        <span class="risk-badge">{{ level }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            {% else %}
+                <p class="empty">
+                    No scans yet. Upload a log file to get started.
+                </p>
+            {% endif %}
+
+            <a class="button" href="/scan">+ Scan a Log File</a>
+            <a class="button secondary" href="/reports">View All Reports</a>
+        </section>
+
+    </main>
+
+    <footer>
+        DataSniff · Sensitive Data Detection Dashboard
+    </footer>
+
+    <!-- Doughnut Chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const canvas = document.getElementById("riskChart");
+        const fallback = document.getElementById("chartFallback");
+
+        if (typeof Chart !== "undefined" && canvas) {
+            new Chart(canvas, {
+                type: "doughnut",
+
+                data: {
+                    labels: [
+                        "High Risk",
+                        "Medium Risk",
+                        "Low Risk"
+                    ],
+
+                    datasets: [{
+                        data: [
+                            {{ high_risk }},
+                            {{ medium_risk }},
+                            {{ low_risk }}
+                        ],
+
+                        backgroundColor: [
+                            "#f87171",
+                            "#fbbf24",
+                            "#4ade80"
+                        ],
+
+                        borderColor: "#111827",
+                        borderWidth: 4,
+                        hoverOffset: 8
+                    }]
+                },
+
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: "65%",
+
+                    plugins: {
+                        legend: {
+                            position: "bottom",
+
+                            labels: {
+                                color: "#e5e7eb",
+                                padding: 18,
+                                usePointStyle: true
+                            }
+                        },
+
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return " " + context.label + ": "
+                                        + context.raw + " reports";
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        } else if (fallback) {
+            fallback.hidden = false;
+        }
+    </script>
+
+</body>
+</html>

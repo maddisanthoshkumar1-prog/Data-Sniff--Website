@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Scan Log File | DataSniff</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .error-message {
+            background: #ffe5e5;
+            color: #b42318;
+            border: 1px solid #f5a5a5;
+            padding: 12px 16px;
+            margin: 16px 0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .upload-info {
+            font-size: 14px;
+            color: #777;
+            margin-top: 12px;
+        }
+
+        .file-input {
+            max-width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <nav class="navbar">
+
+        <div class="logo">DataSniff</div>
+
+        <ul class="menu">
+            <li><a href="/">Home</a></li>
+            <li><a href="/scan">Scan</a></li>
+            <li><a href="/reports">Reports</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+        </ul>
+
+    </nav>
+</header>
+
+<section class="scan-section">
+
+    <div class="container">
+
+        <h1>Upload Log File</h1>
+
+        {% if error %}
+        <div class="error-message" role="alert">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <p>
+            Upload a <b>.txt</b>, <b>.log</b> or <b>.json</b>
+            file to scan for sensitive data.
+        </p>
+
+        <form action="/scan-file"
+              method="POST"
+              enctype="multipart/form-data">
+
+            <input
+                class="file-input"
+                type="file"
+                name="logfile"
+                accept=".txt,.log,.json"               
+                required
+            >
+
+            <p class="upload-info">
+                Supported formats: TXT, LOG, JSON<br>
+                Maximum file size: 5 MB
+            </p>
+
+            <br>
+
+            <button type="submit">
+                Scan File
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+</body>
+</html>

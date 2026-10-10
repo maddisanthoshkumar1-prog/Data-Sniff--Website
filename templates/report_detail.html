@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataSniff | Report Details</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0b1120;
+            color: #e5e7eb;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 20px 6%;
+            background: #111827;
+            border-bottom: 1px solid #263244;
+        }
+
+        nav h2 { margin: 0; color: #38bdf8; }
+
+        nav a {
+            color: #cbd5e1;
+            text-decoration: none;
+            margin-left: 16px;
+        }
+
+        nav a:hover { color: #38bdf8; }
+
+        main {
+            max-width: 1000px;
+            margin: auto;
+            padding: 35px 6%;
+        }
+
+        .panel {
+            background: #111827;
+            border: 1px solid #263244;
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 22px;
+            overflow-wrap: anywhere;
+        }
+
+        .muted { color: #94a3b8; }
+
+        .badge {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .high { color: #fca5a5; background: #451a1a; }
+        .medium { color: #fcd34d; background: #422006; }
+        .low { color: #86efac; background: #052e16; }
+
+        .category {
+            border-bottom: 1px solid #263244;
+            padding: 15px 0;
+        }
+
+        .category:last-child { border-bottom: none; }
+
+        .category h3 { color: #38bdf8; }
+
+        .finding {
+            background: #1e293b;
+            border-radius: 7px;
+            padding: 10px 12px;
+            margin: 8px 0;
+            overflow-wrap: anywhere;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 11px 16px;
+            margin: 8px 8px 0 0;
+            border-radius: 8px;
+            background: #0284c7;
+            color: white;
+            text-decoration: none;
+        }
+
+        .button.secondary { background: #263244; }
+
+        @media (max-width: 600px) {
+            main { padding: 24px 5%; }
+            .panel { padding: 17px; }
+            nav a { margin-left: 0; margin-right: 12px; }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <h2>🛡️ DataSniff</h2>
+        <div>
+            <a href="/">Home</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/scan">Scan</a>
+            <a href="/reports">Reports</a>
+        </div>
+    </nav>
+
+    <main>
+        <h1>Scan Report Details</h1>
+        <p class="muted">Sensitive information is masked for display.</p>
+
+        <section class="panel">
+            <h2>{{ report.get("file_name", "Unknown file") }}</h2>
+
+            <p>
+                <strong>Scan Date:</strong>
+                {{ report.get("date", "Unknown") }}
+            </p>
+
+            {% set risk = report.get("risk_level", "UNKNOWN") %}
+
+            <p>
+                <strong>Risk Level:</strong>
+                {% if risk.startswith("HIGH") %}
+                    <span class="badge high">{{ risk }}</span>
+                {% elif risk.startswith("MEDIUM") %}
+                    <span class="badge medium">{{ risk }}</span>
+                {% elif risk.startswith("LOW") %}
+                    <span class="badge low">{{ risk }}</span>
+                {% else %}
+                    <span class="badge">{{ risk }}</span>
+                {% endif %}
+            </p>
+
+            <p>
+                <strong>Total Findings:</strong> {{ total }}
+            </p>
+        </section>
+
+        <section class="panel">
+            <h2>Detected Sensitive Information</h2>
+
+            {% if results %}
+                {% for category, values in results.items() %}
+                    <div class="category">
+                        <h3>{{ category }} ({{ values|length }})</h3>
+
+                        {% if values %}
+                            {% for value in values %}
+                                <div class="finding">{{ value }}</div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="muted">No findings in this category.</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="muted">No findings recorded for this report.</p>
+            {% endif %}
+        </section>
+        <a class="button" href="{{ url_for('download_report', filename=request.view_args.get('filename', '')) }}">
+    ⬇ Download JSON
+</a>
+        <a class="button" href="/dashboard">← Back to Dashboard</a>
+        <a class="button secondary" href="/reports">All Reports</a>
+        <a class="button secondary" href="/scan">Scan Another File</a>
+    </main>
+</body>
+</html>

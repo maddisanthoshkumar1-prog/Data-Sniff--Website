@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataSniff</title>
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            DataSniff
+        </div>
+
+        <ul class="menu">
+
+            <li><a href="/">Home</a></li>
+            
+            <li><a href="/dashboard">Dashboard</a></li>
+            
+            <li><a href="/scan">Scan</a></li>
+
+             <li><a href="/reports">Reports</a></li>
+
+            <li><a href="/about">About</a></li>
+
+            <li><a href="/contact">Contact</a></li>
+
+        </ul>
+
+    </nav>
+
+</header>
+
+<section class="hero">
+
+    <div class="hero-text">
+
+        <h1>DataSniff</h1>
+
+        <h2>Log and Data Leak Detector</h2>
+
+        <p>
+
+            Detect Emails, Passwords, API Keys, Tokens and
+            other sensitive information from log files using
+            Python, Regex and Entropy Analysis.
+
+        </p>
+
+        <a href="/scan">
+
+            <button>
+
+                Start Scanning
+
+            </button>
+
+        </a>
+
+    </div>
+
+</section>
+<section class="features">
+
+    <h2>Key Features</h2>
+
+    <div class="feature-container">
+
+        <div class="feature-card">
+
+            <h3>📧 Email Detection</h3>
+
+            <p>Detect email addresses from log files using Regular Expressions.</p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <h3>🔑 API Key Detection</h3>
+
+            <p>Identify API keys and access tokens to prevent data leakage.</p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <h3>🔐 Password Detection</h3>
+
+            <p>Detect passwords stored inside log files.</p>
+
+        </div>
+
+    </div>
+
+</section>
+<footer>
+
+    <p>
+
+        © 2026 DataSniff | Log and Data Leak Detector
+
+    </p>
+
+</footer>
+
+</body>
+
+</html>

@@ -1,0 +1,333 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - DataSniff</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .reports-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 25px 20px 60px;
+        }
+
+        .reports-heading {
+            text-align: center;
+            color: #00e5ff;
+            margin-top: 100px;
+            margin-bottom: 10px;
+        }
+
+        .reports-subtitle {
+            text-align: center;
+            color: #cbd5e1;
+            margin-bottom: 30px;
+        }
+
+        .report-tools {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+            padding: 18px;
+            background: rgba(17, 24, 39, 0.95);
+            border: 1px solid #263244;
+            border-radius: 12px;
+        }
+
+        .report-tools input,
+        .report-tools select {
+            flex: 1;
+            min-width: 180px;
+            padding: 12px;
+            border: 1px solid #475569;
+            border-radius: 7px;
+            background: #0b1120;
+            color: #e5e7eb;
+            font-size: 15px;
+        }
+
+        .report-card {
+            margin-bottom: 18px;
+            padding: 22px;
+            background: rgba(17, 24, 39, 0.95);
+            border: 1px solid #263244;
+            border-radius: 12px;
+            color: #e5e7eb;
+            overflow-wrap: anywhere;
+        }
+
+        .report-card h2 {
+            color: #00e5ff;
+            margin-top: 0;
+        }
+
+        .report-card p {
+            line-height: 1.6;
+        }
+
+        .report-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+
+        .report-btn {
+            display: inline-block;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 7px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .view-btn {
+            background: #0284c7;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #991b1b;
+            color: white;
+        }
+
+        .report-btn:hover {
+            opacity: 0.85;
+        }
+
+        .risk-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .risk-high {
+            background: #451a1a;
+            color: #fca5a5;
+        }
+
+        .risk-medium {
+            background: #422006;
+            color: #fcd34d;
+        }
+
+        .risk-low {
+            background: #052e16;
+            color: #86efac;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #cbd5e1;
+            padding: 30px 10px;
+        }
+
+        #visibleCount {
+            color: #cbd5e1;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 600px) {
+            .reports-heading {
+                margin-top: 55px;
+            }
+
+            .report-tools {
+                padding: 12px;
+            }
+
+            .report-card {
+                padding: 17px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar">
+            <div class="logo">DataSniff</div>
+
+            <ul class="menu">
+                <li><a href="/">Home</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/scan">Scan</a></li>
+                <li><a href="/reports">Reports</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="reports-container">
+
+        <h1 class="reports-heading">Previous Scan Reports</h1>
+
+        <p class="reports-subtitle">
+            Search, filter and manage your DataSniff scan history.
+        </p>
+
+        <div class="report-tools">
+            <input
+                type="search"
+                id="reportSearch"
+                placeholder="Search by file name..."
+                aria-label="Search reports by file name"
+            >
+
+            <select id="riskFilter" aria-label="Filter reports by risk">
+                <option value="ALL">All Risk Levels</option>
+                <option value="HIGH">High Risk</option>
+                <option value="MEDIUM">Medium Risk</option>
+                <option value="LOW">Low Risk</option>
+            </select>
+        </div>
+
+        <p id="visibleCount">
+            Showing {{ total_reports }} reports
+        </p>
+
+        <div id="reportsList">
+
+            {% if reports %}
+
+                {% for report in reports %}
+
+                    {% set risk = report.get("risk_level", "UNKNOWN") %}
+
+                    <article
+                        class="report-card"
+                        data-filename="{{ report.get('file_name', '')|lower }}"
+                        data-risk="{{ risk.split()[0]|upper }}"
+                    >
+
+                        <h2>
+                            📄 {{ report.get("file_name", "Unknown file") }}
+                        </h2>
+
+                        <p>
+                            <strong>Date:</strong>
+                            {{ report.get("date", "Unknown") }}
+                        </p>
+
+                        <p>
+                            <strong>Risk Level:</strong>
+
+                            {% if risk.startswith("HIGH") %}
+                                <span class="risk-badge risk-high">{{ risk }}</span>
+                            {% elif risk.startswith("MEDIUM") %}
+                                <span class="risk-badge risk-medium">{{ risk }}</span>
+                            {% elif risk.startswith("LOW") %}
+                                <span class="risk-badge risk-low">{{ risk }}</span>
+                            {% else %}
+                                <span class="risk-badge">{{ risk }}</span>
+                            {% endif %}
+                        </p>
+
+                        <p>
+                            <strong>Categories Detected:</strong>
+                            {{ report.get("results", {})|length }}
+                        </p>
+
+                        <div class="report-actions">
+                            <a
+                                class="report-btn view-btn"
+                                href="{{ url_for('report_detail', filename=report.get('_report_id', '')) }}"
+                            >
+                                View Report
+                            </a>
+
+                            <form
+                                method="POST"
+                                action="{{ url_for('delete_report', filename=report.get('_report_id', '')) }}"
+                                onsubmit="return confirm('Delete this report permanently?');"
+                            >
+                                <button type="submit" class="report-btn delete-btn">
+                                    Delete Report
+                                </button>
+                            </form>
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="contact-card empty-message">
+                    <h2>No Reports Found</h2>
+                    <p>Scan a log file to generate your first report.</p>
+                    <a class="report-btn view-btn" href="/scan">Scan a File</a>
+                </div>
+
+            {% endif %}
+
+            <p id="noMatches" class="empty-message" hidden>
+                No reports match your search or risk filter.
+            </p>
+
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <h2>DataSniff</h2>
+            <p>Log and Data Leak Detector</p>
+            <p>© 2026 All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const searchInput = document.getElementById("reportSearch");
+        const riskFilter = document.getElementById("riskFilter");
+        const reportCards = Array.from(
+            document.querySelectorAll(".report-card")
+        );
+        const visibleCount = document.getElementById("visibleCount");
+        const noMatches = document.getElementById("noMatches");
+
+        function filterReports() {
+            const searchText = searchInput.value.trim().toLowerCase();
+            const selectedRisk = riskFilter.value;
+            let visible = 0;
+
+            reportCards.forEach(card => {
+                const filename = card.dataset.filename || "";
+                const risk = card.dataset.risk || "";
+
+                const matchesName = filename.includes(searchText);
+                const matchesRisk =
+                    selectedRisk === "ALL" || risk === selectedRisk;
+
+                const show = matchesName && matchesRisk;
+
+                card.hidden = !show;
+
+                if (show) visible++;
+            });
+
+            visibleCount.textContent =
+                `Showing ${visible} of ${reportCards.length} reports`;
+
+            noMatches.hidden = visible !== 0;
+        }
+
+        searchInput.addEventListener("input", filterReports);
+        riskFilter.addEventListener("change", filterReports);
+
+        filterReports();
+    </script>
+
+</body>
+</html>

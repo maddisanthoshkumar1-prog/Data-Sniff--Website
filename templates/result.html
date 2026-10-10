@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>DataSniff Results</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>DataSniff Scan Report</h1>
+
+<div class="result-card">
+
+<h2>Summary</h2>
+
+<p><strong>Total Sensitive Items Found:</strong> {{ total }}</p>
+
+<p><strong>Risk Level:</strong> {{ risk }}</p>
+
+</div>
+
+{% for category, items in results.items() %}
+
+<div class="result-card">
+
+<h2><h2>
+{% if category == "Emails" %}
+📧
+{% elif category == "Passwords" %}
+🔐
+{% elif category == "API Keys" %}
+🔑
+{% elif category == "IP Addresses" %}
+🌐
+{% elif category == "Phone Numbers" %}
+📱
+{% elif category == "GitHub Tokens" %}
+🐙
+{% elif category == "High Entropy Strings" %}
+⚠️
+{% endif %}
+{{ category }}
+</h2>
+
+{% if items %}
+
+<ul>
+
+{% for item in items %}
+
+<li>{{ item }}</li>
+
+{% endfor %}
+
+</ul>
+
+{% else %}
+
+<p>No {{ category }} Found.</p>
+
+{% endif %}
+
+</div>
+
+{% endfor %}
+
+<br>
+
+<a href="/scan">⬅ Scan Another File</a>
+
+</div>
+
+</body>
+
+</html>
